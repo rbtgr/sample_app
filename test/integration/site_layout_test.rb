@@ -16,6 +16,11 @@ class SiteLayoutTest < ActionDispatch::IntegrationTest
     #5.3.4 演習
     get contact_path
     assert_select "title", full_title("Contact")
+
+    #5.4.2 演習
+    get signup_path
+    assert_select "title", full_title("Sign up")
+
   end
 
 end
