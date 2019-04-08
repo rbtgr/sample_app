@@ -7,19 +7,14 @@
                                'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application',
                                'data-turbolinks-track': 'reload' %>
-    <%= render 'layout/shim' %>
-
-    <!--[if lt IE 9]>
-      <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/r29/html5.min.js">
-      </script>
-    <![endif]-->
+    <%= render 'layouts/shim' %>
   </head>
   <body>
-    <%= render 'layout/header' %>
+    <%= render 'layouts/header' %>
 
     <div class="container">
       <%= yield %>
-      <%= render 'layout/footer' %>
+      <%= render 'layouts/footer' %>
     </div>
   </body>
 </html>
