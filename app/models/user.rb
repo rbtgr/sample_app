@@ -20,4 +20,12 @@ class User < ApplicationRecord
     length: {maximum: 255}, # 最大長
     format: { with: VALID_EMAIL_REGEX },  #メールのフォーマット確認
     uniqueness: { case_sensitive: false } #大文字小文字を区別する
+
+  has_secure_password #パスワードハッシュを利用するためのメソッド
+
+  validates(
+    :password,
+    presence: true,
+    length: { minimum: 6 }
+    )
 end

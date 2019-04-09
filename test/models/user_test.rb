@@ -7,7 +7,12 @@ class UserTest < ActiveSupport::TestCase
 
 # setupメソッド内に書かれた処理は、各テストが走る直前に実行されます。
   def setup
-    @user = User.new(name: "Example User", email: "user@example.com")
+    @user = User.new(
+      name: "Example User",
+      email: "user@example.com",
+      password: "foobar",              #パスワード
+      password_confirmation: "foobar", #パスワード確認
+      )
   end
 
   test "should be valid" do
@@ -80,4 +85,16 @@ class UserTest < ActiveSupport::TestCase
     @user.save
     assert_equal mixed_case_email.downcase, @user.reload.email
   end
+
+#パスワードの検証
+  test "password should be present (nonblank)" do
+    @user.password = @user.password_confirmation = " " * 6
+    assert_not @user.valid?
+  end
+
+  test "password should have a minimum length" do
+    @user.password = @user.password_confirmation = "a" * 5
+    assert_not @user.valid?
+  end
+
 end
