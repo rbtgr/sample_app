@@ -7,4 +7,7 @@ Rails.application.routes.draw do
   get  '/contact', to: 'static_pages#contact'
   get  '/signup',  to: 'users#new'
 
+  #RESTfulなUsersリソースで必要となるアクションをまとめて追加
+  resources :users
+
 end
