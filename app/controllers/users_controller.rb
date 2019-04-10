@@ -12,4 +12,28 @@ class UsersController < ApplicationController
   def new
     @user = User.new
   end
+
+  def create
+    @user = User.new(user_params) #
+   #@user = User.new(params[:user]) ではパーミッションがないためエラー
+
+   if @user.save  #保存処理の成否
+      #正常系
+    else
+      render 'new'
+    end
+  end
+
+#以下はクラスからは呼び出せるが、インスタンスからは呼び出せない
+private
+  def user_params # パラメーターのパーミッション設定
+    params.require(:user).permit(
+      :name,
+      :meil,
+      :password,
+      :password_confirmaiton
+    )
+
+  end
+
 end
