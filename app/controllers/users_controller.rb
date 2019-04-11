@@ -19,9 +19,12 @@ class UsersController < ApplicationController
 
     if @user.save  #保存処理の成否
       #正常系
+      flash[:success] = "Welcome to the Sample App!"
+
+
       redirect_to @user
     # redirect_to user_url(@user) と同等
-    else
+    else #失敗時の処理
       render 'new'
     end
   end
