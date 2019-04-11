@@ -3,7 +3,6 @@ class SessionsController < ApplicationController
   end
 
   def create
-    render 'new'
     user = User.find_by(email: params[:session][:email].downcase)
     if user && user.authenticate(params[:session][:password])
       # user  : find_byの該当があればモデルオブジェクト、なければnil
@@ -13,8 +12,9 @@ class SessionsController < ApplicationController
     else
     # エラーメッセージ
       #表示したテンプレートをrenderメソッドで強制的に再レンダリングしても
-      #リクエストと見なされないため、リクエストのメッセージが消えません
-      flash[:danger] = 'Invalid email/password combination'
+      #リクエストと見なされないため、リクエストのメッセージが消えない
+      #この場合、flash.now とすれば、現在のActionのみ有効になる
+      flash.now[:danger] = 'Invalid email/password combination'
 
       render 'new'
     end
