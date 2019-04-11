@@ -17,8 +17,10 @@ class UsersController < ApplicationController
     @user = User.new(user_params) #
    #@user = User.new(params[:user]) ではパーミッションがないためエラー
 
-   if @user.save  #保存処理の成否
+    if @user.save  #保存処理の成否
       #正常系
+      redirect_to @user
+    # redirect_to user_url(@user) と同等
     else
       render 'new'
     end
@@ -29,7 +31,7 @@ private
   def user_params # パラメーターのパーミッション設定
     params.require(:user).permit(
       :name,
-      :meil,
+      :email,
       :password,
       :password_confirmaiton
     )
