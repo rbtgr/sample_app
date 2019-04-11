@@ -8,7 +8,10 @@ class SessionsController < ApplicationController
       # user  : find_byの該当があればモデルオブジェクト、なければnil
       # user.authenticate(xxx) :
       #             パスワード一致ならモデルオブジェクト、なければnil
-      # ユーザーログイン後にユーザー情報のページにリダイレクトする
+      log_in(user) # session helper
+      redirect_to user
+    # redirect_to user_url(user) と同じ
+
     else
     # エラーメッセージ
       #表示したテンプレートをrenderメソッドで強制的に再レンダリングしても
