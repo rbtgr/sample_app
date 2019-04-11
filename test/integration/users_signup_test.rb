@@ -44,7 +44,8 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     assert_template 'users/show'
 
   # flash のテスト
-  # assert_not flash.FILL_IN
+    assert_not flash[:success].blank?
+    #別パターン# assert_not flash.empty?
   end
 
 end
