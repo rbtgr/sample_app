@@ -46,6 +46,9 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
   # flash のテスト
     assert_not flash[:success].blank?
     #別パターン# assert_not flash.empty?
+
+   # サインアップ後に自動的にログインしていること
+    assert is_logged_in?,  "ログインできてないぞ"
   end
 
 end

@@ -9,8 +9,10 @@ class SessionsController < ApplicationController
       # user.authenticate(xxx) :
       #             パスワード一致ならモデルオブジェクト、なければnil
       log_in(user) # session helper
+       # session の :user_id に、userのid値を保存
+
       redirect_to user
-    # redirect_to user_url(user) と同じ
+     # redirect_to user_url(user) と同じ
 
     else
     # エラーメッセージ
@@ -24,7 +26,8 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-
+    log_out
+    redirect_to root_url
   end
 
 end
