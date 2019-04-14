@@ -11,6 +11,17 @@ class SessionsController < ApplicationController
       log_in(user) # session helper
        # session の :user_id に、userのid値を保存
 
+      if params[:session][:remember_me] == '1'
+        remember(user)
+      else
+        forget(user)
+      end
+      # 三項演算子で以下のようにも書ける。
+      # params[:session][:remember_me] == '1' ? remember(user) : forget(user)
+
+    # sessions_helper で定義したメソッド
+    #  remember user
+
       redirect_to user
      # redirect_to user_url(user) と同じ
 
@@ -26,7 +37,7 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    log_out
+    log_out if logged_in? # ログイン状態でのみログアウトする
     redirect_to root_url
   end
 

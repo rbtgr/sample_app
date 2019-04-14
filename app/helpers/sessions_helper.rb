@@ -7,20 +7,31 @@ module SessionsHelper
     session[:user_id] = user.id
   end
 
+ # ユーザーのセッションを永続的にする ::リスト 9.8: ユーザーを記憶する
+  def remember(user)
+    user.remember   # Userモデルで定義した、トークンハッシュの保存メソッド。
+    cookies.permanent.signed[:user_id] = user.id
+    cookies.permanent[:remember_token] = user.remember_token
+  end
+
 # 現在ログイン中のユーザーを返す (いる場合)
   def current_user
     # Railsメソッド session を使用し、session[:user_id]がnilでない場合実行
-    if session[:user_id]
+    if (user_id = session[:user_id])
+      @current_user ||= User.find_by(id: user_id)
+      #            ^- @current_user が nil の場合検索結果を代入
 
-      # @current_user が nil の場合検索結果を代入
-     @current_user ||= User.find_by(id: session[:user_id])
-     # 以下の構文と同じ
-      # if @current_user.nil?
-      #   @current_user = User.find_by(id: session[:user_id])
-      # else
-      #   @current_user
-      # end
+    # クッキーにIDがあれば
+    elsif (user_id = cookies.signed[:user_id])
+      user = User.find_by(id: user_id)
+
+      # user が存在し、認証できた場合。
+      if user && user.authenticated?(cookies[:remember_token])
+        log_in user
+        @current_user = user
+      end
     end
+
   end
 
   # ユーザーがログインしていればtrue、その他ならfalseを返す
@@ -29,10 +40,19 @@ module SessionsHelper
     !current_user.nil?
   end
 
+  # 永続的セッションを破棄する
+  def forget(user)
+    user.forget   # モデルのforget メソッドをコール
+    cookies.delete(:user_id)
+    cookies.delete(:remember_token)
+  end
+
   # 現在のユーザーをログアウトする
   def log_out
+    forget(current_user)  # 上で定義してたforgetメソッドをコール
     session.delete(:user_id)
     @current_user = nil
   end
+
 end
 
