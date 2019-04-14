@@ -55,4 +55,22 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
 
   end
 
+
+# リスト 9.25: [remember me] チェックボックスのテスト
+  test "login with remembering" do
+    log_in_as(@user, remember_me: '1')
+    assert_not_empty cookies['remember_token']
+    # 要注意 ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
+    # テスト内ではcookiesメソッドにシンボルを使えない
+  end
+
+  test "login without remembering" do
+    # クッキーを保存してログイン
+    log_in_as(@user, remember_me: '1')
+    delete logout_path
+    # クッキーを削除してログイン
+    log_in_as(@user, remember_me: '0')
+    assert_empty cookies['remember_token']
+  end
+
 end
