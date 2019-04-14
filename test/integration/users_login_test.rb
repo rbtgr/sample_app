@@ -59,7 +59,12 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
 # リスト 9.25: [remember me] チェックボックスのテスト
   test "login with remembering" do
     log_in_as(@user, remember_me: '1')
-    assert_not_empty cookies['remember_token']
+
+    assert_equal(
+      cookies['remember_token'],
+      assigns(:user).remember_token)
+
+    #assert_not_empty cookies['remember_token']
     # 要注意 ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
     # テスト内ではcookiesメソッドにシンボルを使えない
   end

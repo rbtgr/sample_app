@@ -3,18 +3,18 @@ class SessionsController < ApplicationController
   end
 
   def create
-    user = User.find_by(email: params[:session][:email].downcase)
-    if user && user.authenticate(params[:session][:password])
+    @user = User.find_by(email: params[:session][:email].downcase)
+    if @user && @user.authenticate(params[:session][:password])
       # user  : find_byの該当があればモデルオブジェクト、なければnil
       # user.authenticate(xxx) :
       #             パスワード一致ならモデルオブジェクト、なければnil
-      log_in(user) # session helper
+      log_in(@user) # session helper
        # session の :user_id に、userのid値を保存
 
       if params[:session][:remember_me] == '1'
-        remember(user)
+        remember(@user)
       else
-        forget(user)
+        forget(@user)
       end
       # 三項演算子で以下のようにも書ける。
       # params[:session][:remember_me] == '1' ? remember(user) : forget(user)
@@ -22,7 +22,7 @@ class SessionsController < ApplicationController
     # sessions_helper で定義したメソッド
     #  remember user
 
-      redirect_to user
+      redirect_to @user
      # redirect_to user_url(user) と同じ
 
     else
