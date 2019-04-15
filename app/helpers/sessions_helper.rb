@@ -23,6 +23,11 @@ module SessionsHelper
 
     # クッキーにIDがあれば
     elsif (user_id = cookies.signed[:user_id])
+
+  # 分岐がテスト実行されているかを確認するために例外処理を挿入する
+      # テストがパスすれば、この部分がテストされていないことがわかる
+      # raise
+
       user = User.find_by(id: user_id)
 
       # user が存在し、認証できた場合。
