@@ -32,6 +32,15 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
   end
 
+  def update
+    @user = User.find(params[:id])
+    if @user.update_attributes(user_params)
+      # 更新に成功した場合を扱う。
+    else
+      render 'edit'
+    end
+  end
+
 #以下はクラスからは呼び出せるが、インスタンスからは呼び出せない
 private
   def user_params # パラメーターのパーミッション設定
