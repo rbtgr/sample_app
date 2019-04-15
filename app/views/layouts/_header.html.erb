@@ -15,7 +15,8 @@
             <ul class="dropdown-menu">
               <li><%= link_to "Profile", current_user %></li>
                 <%#     current_user： カレントユーザーを取得するヘルパー %>
-              <li><%= link_to "Settings", '#' %></li>
+
+              <li><%= link_to "Settings", edit_user_path(current_user) %></li>
               <li class="divider"></li>
               <li>
                 <%= link_to "Log out", logout_path, method: :delete %>

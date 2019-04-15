@@ -1,0 +1,35 @@
+<% provide(:title, "Edit user") %>
+<h1>Update your profile</h1>
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <%# users_controller で設定した@user の値が利用される %>
+    <%= form_for(@user) do |f| %>
+      <%= render 'shared/error_messages' %>
+
+      <%= f.label :name %>
+      <%= f.text_field :name, class: 'form-control' %>
+
+      <%= f.label :email %>
+      <%= f.email_field :email, class: 'form-control' %>
+
+      <%= f.label :password %>
+      <%= f.password_field :password, class: 'form-control' %>
+
+      <%= f.label :password_confirmation, "Confirmation" %>
+      <%= f.password_field :password_confirmation, class: 'form-control' %>
+
+      <%= f.submit "Save changes", class: "btn btn-primary" %>
+    <% end %>
+
+    <div class="gravatar_edit">
+      <%= gravatar_for @user %>
+      <a href="http://gravatar.com/emails"
+          target="_blank"
+          rel="noopener" >change</a>
+      <%# target="_blank" を使うと、リンク先を新しいタブで開く
+          ただし、リンク先のサイトがHTML documentのwindowオブジェクトを扱えてしまう
+          rel="noopener" を設定することで対処できる。%>
+    </div>
+  </div>
+</div>

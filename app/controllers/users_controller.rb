@@ -28,6 +28,10 @@ class UsersController < ApplicationController
     end
   end
 
+  def edit
+    @user = User.find(params[:id])
+  end
+
 #以下はクラスからは呼び出せるが、インスタンスからは呼び出せない
 private
   def user_params # パラメーターのパーミッション設定
