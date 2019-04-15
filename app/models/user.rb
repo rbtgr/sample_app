@@ -28,15 +28,14 @@ class User < ApplicationRecord
   has_secure_password
 
   #パスワードのバリデーション
-  validates :password, presence: true, length: { minimum: 6 } #, allow_nil: true
-  # validates(
-  #   :password,
-  #     { presence: true,
-  #       length: { minimum: 6 },
-  #       allow_nil: true
-  #       })
+  validates(
+    :password,
+      { presence: true,
+        length: { minimum: 6 },
+        allow_nil: true    # 値がnilの場合にバリデーションをスキップ。
+        })       # リスト 10.13: パスワードが空のままでも更新できるようにする
 
-  validates(:password_confirmation, presence: true)
+        #validates(:password_confirmation, presence: true)
 
  # モデルのクラスメソッド
  #   メソッドがインスタンスを必要としていない場合は、
