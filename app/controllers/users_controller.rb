@@ -1,12 +1,13 @@
 class UsersController < ApplicationController
+
+  before_action :logged_in_user, only: [:edit, :update]
+  # editとupdateのアクション時、アクションの前にlogged_in_user を実行
+
   def show
     @user = User.find(params[:id])
     #params[:id]は文字列型の "1" ですが、
     #findメソッドでは自動的に整数型に変換されます)。
-
-    #debugger
-    #byebug gemによるデバッガー起動
-
+    #debugger #byebug gemによるデバッガー起動
   end
 
   def new
@@ -53,8 +54,16 @@ private
       :password_confirmation
       # password_confirmation のパーミッションがないと
       # 同一性チェックなどが行われない
-
     )
+  end
+
+# beforeアクション
+  # ログイン済みユーザーかどうか確認
+  def logged_in_user
+    unless logged_in?
+      flash[:danger] = "Please log in."
+      redirect_to login_url
+    end
   end
 
 end
