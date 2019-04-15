@@ -14,7 +14,7 @@ class UsersController < ApplicationController
   end
 
   def create
-    @user = User.new(user_params) #
+    @user = User.new(user_params)
    #@user = User.new(params[:user]) ではパーミッションがないためエラー
 
     if @user.save  #保存処理の成否
@@ -48,7 +48,10 @@ private
       :name,
       :email,
       :password,
-      :password_confirmaiton
+      :password_confirmation
+      # password_confirmationのパーミッションがないと
+      # 同一性チェックなどが行われない
+
     )
   end
 

@@ -17,20 +17,26 @@ class User < ApplicationRecord
  #before_save { email.downcase! }  とすることもできる
 
   validates :name, presence: true, length: {maximum: 50}
-  validates :email,
+  validates( :email,
     presence: true,         # 空白不許可
     length: {maximum: 255}, # 最大長
     format: { with: VALID_EMAIL_REGEX },  #メールのフォーマット確認
-    uniqueness: { case_sensitive: false } #大文字小文字を区別する
+    uniqueness: { case_sensitive: false }) #大文字小文字を区別する
 
-  has_secure_password #パスワードハッシュを利用するためのメソッド
+
+  #パスワードハッシュを利用するためのメソッド
+  has_secure_password
 
   #パスワードのバリデーション
-  validates(
-    :password,
-    presence: true,
-    length: { minimum: 6 }
-    )
+  validates :password, presence: true, length: { minimum: 6 } #, allow_nil: true
+  # validates(
+  #   :password,
+  #     { presence: true,
+  #       length: { minimum: 6 },
+  #       allow_nil: true
+  #       })
+
+  validates(:password_confirmation, presence: true)
 
  # モデルのクラスメソッド
  #   メソッドがインスタンスを必要としていない場合は、
@@ -38,8 +44,7 @@ class User < ApplicationRecord
 
   # 渡された文字列のハッシュ値を返す
   def User.digest(string)
-    cost = ActiveModel::SecurePassword.min_cost ?
-    BCrypt::Engine::MIN_COST : BCrypt::Engine.cost
+    cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST : BCrypt::Engine.cost
 
     BCrypt::Password.create(string, cost: cost)
 
@@ -53,7 +58,7 @@ class User < ApplicationRecord
   end
 
   def User.new_token
-    #Ruby標準ライブラリ 22文字のランダムな文字を返す
+    #Rubyライブラリ 22文字のランダムな文字を返す
     SecureRandom.urlsafe_base64
   end
 

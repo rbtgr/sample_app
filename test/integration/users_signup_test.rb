@@ -21,7 +21,30 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     assert_template 'users/new'
     assert_select 'div#error_explanation'
     assert_select 'div.alert'
-    assert_select 'form[action=?]','/signup'
+   # assert_select 'form[action=?]','/signup'
+     assert_select 'form[action=?]','/users'
+  end
+
+
+  test "前後で違うパスワード" do
+    get signup_path
+  # 引数がブロック実行後も変わらないこと
+    assert_no_difference('User.count')  do
+      post(
+        users_path,
+        params: {
+          user: {
+            name:  "user",
+            email: "user@email.com",
+            password:              "aaaaaa",
+            password_confirmation: "bbbbbb"
+          }
+        }
+      )
+    end
+    assert_template 'users/new'
+    assert_select 'div#error_explanation'
+    assert_select 'div.alert'
   end
 
   test "valid signup information" do
@@ -32,7 +55,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
         params: {
           user: {
             name:  "Example User",
-            email: "user@example.com",
+            email: "user1@example.com",
             password:              "password",
             password_confirmation: "password"
           }
