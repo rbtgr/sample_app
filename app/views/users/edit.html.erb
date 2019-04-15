@@ -1,8 +1,13 @@
 <% provide(:title, "Edit user") %>
+<% provide(:button_text, 'Save changes') %>
+
 <h1>Update your profile</h1>
 
 <div class="row">
   <div class="col-md-6 col-md-offset-3">
+
+    <%= render 'form' %>
+  <style>  /*  partial 化
     <%# users_controller で設定した@user の値が利用される %>
     <%= form_for(@user) do |f| %>
       <%= render 'shared/error_messages' %>
@@ -21,6 +26,8 @@
 
       <%= f.submit "Save changes", class: "btn btn-primary" %>
     <% end %>
+  */ </style>
+
 
     <div class="gravatar_edit">
       <%= gravatar_for @user %>
