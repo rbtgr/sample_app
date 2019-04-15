@@ -14,7 +14,7 @@ Rails.application.routes.draw do
   post   '/login',   to: 'sessions#create'
   delete '/logout',  to: 'sessions#destroy'
 
-  #UsersモデルへのRESTfulなアクションをまとめて追加
+  #Usersモデルへのアクションをまとめて追加
   resources :users
 
 =begin

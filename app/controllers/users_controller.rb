@@ -49,7 +49,7 @@ private
       :email,
       :password,
       :password_confirmation
-      # password_confirmationのパーミッションがないと
+      # password_confirmation のパーミッションがないと
       # 同一性チェックなどが行われない
 
     )
