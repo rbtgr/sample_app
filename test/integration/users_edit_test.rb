@@ -27,6 +27,8 @@ class UsersEditTest < ActionDispatch::IntegrationTest
 
   end
 
+=begin
+
   test "successful edit" do
     log_in_as(@user)          # 追加
     get edit_user_path(@user)
@@ -46,6 +48,27 @@ class UsersEditTest < ActionDispatch::IntegrationTest
     assert_equal name,  @user.name
     assert_equal email, @user.email
   end
+=end
 
+ # ログインしていないユーザーが編集ページにアクセスしようとしていたなら、
+ # ユーザーがログインした後にはその編集ページにリダイレクトされるようにする
+  test "successful edit with friendly forwarding" do
+    get edit_user_path(@user)
+    log_in_as(@user)
+    assert_redirected_to edit_user_url(@user)   # <-Fail
+    name  = "Foo Bar"
+    email = "foo@bar.com"
+    patch user_path(@user), params: { user: {
+      name:  name,
+      email: email,
+      password:              "",
+      password_confirmation: "" } }
+
+    assert_not flash.empty?
+    assert_redirected_to @user
+    @user.reload
+    assert_equal name,  @user.name
+    assert_equal email, @user.email
+  end
 
 end

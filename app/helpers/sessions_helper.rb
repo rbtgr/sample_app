@@ -64,5 +64,20 @@ module SessionsHelper
     @current_user = nil
   end
 
+  # 記憶したURL (もしくはデフォルト値) にリダイレクト
+  def redirect_back_or(default)
+    redirect_to(session[:forwarding_url] || default)
+    session.delete(:forwarding_url)
+  end
+
+  # アクセスしようとしたURLを覚えておく
+  def store_location
+    session[:forwarding_url] = request.original_url if request.get?
+    # get リクエストの時のみURLを保存する。
+    # 例えばログインしていないユーザーがフォームを使って送信した場合、
+    # 転送先のURLを保存させないようにできます。
+    # 例えばユーザがセッションcookieを手動で削除してフォームから送信するケースなど
+  end
+
 end
 
