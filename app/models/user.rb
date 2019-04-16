@@ -1,9 +1,13 @@
 class User < ApplicationRecord
 
  # アクセスメソッドを使い、仮装的な属性remember_token を作る。
-  attr_accessor :remember_token
+  attr_accessor :remember_token, :activation_token
    # 読み込みメソッド user.remember_token と
    # 書き込みメソッド user.remember_token = xxx   が設定される。
+
+   before_save   :downcase_email
+   before_create :create_activation_digest
+
 
 # Emailアドレス検証用の正規表現(ドット連続未対応)
   # VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
@@ -34,12 +38,10 @@ class User < ApplicationRecord
         length: { minimum: 6 },
         allow_nil: true    # 値がnilの場合にバリデーションをスキップ。
         })       # リスト 10.13: パスワードが空のままでも更新できるようにする
-
         #validates(:password_confirmation, presence: true)
 
  # モデルのクラスメソッド
- #   メソッドがインスタンスを必要としていない場合は、
- #   クラスメソッドにするのが常道。
+ #   メソッドがインスタンス不要な場合は、クラスメソッドにするのが常道。
 
   # 渡された文字列のハッシュ値を返す
   def User.digest(string)
@@ -49,10 +51,8 @@ class User < ApplicationRecord
 
     # わかりにくいが、以下のようにもかける。
     # (1) def self.digest(string)
-    #
     # (2) class << self
     #       def digest(string)
-    #
     # selfは、通常Userのインスタンスをさすが、この場合はUserクラスを指す。
   end
 
@@ -89,5 +89,18 @@ class User < ApplicationRecord
   def forget
     update_attribute(:remember_digest, nil)
   end
+
+private
+    # メールアドレスをすべて小文字にする
+    def downcase_email
+      self.email = email.downcase
+      # self.email.downcase! #演習 こうもかける
+    end
+
+    # 有効化トークンとダイジェストを作成および代入する
+    def create_activation_digest
+      self.activation_token  = User.new_token
+      self.activation_digest = User.digest(activation_token)
+    end
 
 end

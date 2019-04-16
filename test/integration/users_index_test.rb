@@ -29,9 +29,8 @@ class UsersIndexTest < ActionDispatch::IntegrationTest
       puts
       print (user.id.to_s + "  " )
       print user.name
-      puts
     end
-
+    puts
   end
 
   test "index as non-admin" do
