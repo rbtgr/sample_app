@@ -5,6 +5,8 @@ class UsersController < ApplicationController
   before_action :correct_user,   only: [:edit, :update]
    # editとupdateのアクション時、アクションの前にlogged_in_user を実行
 
+   before_action :admin_user, only: :destroy
+
   def index
       # @users = User.all  # ページネーションを使わない場合。
     @users = User.paginate(page: params[:page])
@@ -90,4 +92,10 @@ private
       # current_user? ヘルパーを使わない場合
       #  redirect_to(root_url) unless @user == current_user
   end
+
+  # 管理者かどうか確認
+  def admin_user
+    redirect_to(root_url) unless current_user.admin?
+  end
+
 end
