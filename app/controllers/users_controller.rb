@@ -1,9 +1,15 @@
 class UsersController < ApplicationController
  # ログイン済みユーザーかどうか確認
-  before_action :logged_in_user, only: [:edit, :update]
+  before_action :logged_in_user, only: [:index, :edit, :update]
  # 正しいユーザーかどうか確認
   before_action :correct_user,   only: [:edit, :update]
    # editとupdateのアクション時、アクションの前にlogged_in_user を実行
+
+  def index
+    @users = User.all
+
+
+  end
 
   def show
     @user = User.find(params[:id])
