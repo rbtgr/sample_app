@@ -6,8 +6,9 @@ class UsersController < ApplicationController
    # editとupdateのアクション時、アクションの前にlogged_in_user を実行
 
   def index
-    @users = User.all
-
+      # @users = User.all  # ページネーションを使わない場合。
+    @users = User.paginate(page: params[:page])
+    # ページネーション :params[:page] は will_paginateによって自動生成される。
 
   end
 
