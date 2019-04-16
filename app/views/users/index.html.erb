@@ -12,3 +12,11 @@
 </ul>
 
 <%= will_paginate  %>
+
+ <%# User.paginate(page: params[:page])の中身を確認 %>
+<%= if Rails.env.development?
+      @users.each do |t|  p (t.attributes.to_s + "\n") end
+    end
+%>
+
+
