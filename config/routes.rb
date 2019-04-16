@@ -17,6 +17,10 @@ Rails.application.routes.draw do
   #Usersモデルへのアクションをまとめて追加
   resources :users
 
+  resources :account_activations, only: [:edit]
+   # URL           /account_activation/<token>/edit
+   # 名前付きルート  edit_account_activation_url(token)
+
 =begin
 HTTP  Request|
 Verb  | URL          |Action | 名前付きroot     | 用途 |
