@@ -1,5 +1,6 @@
 class SessionsController < ApplicationController
   def new
+    # debugger # デバッガを起動するメソッド
   end
 
   def create

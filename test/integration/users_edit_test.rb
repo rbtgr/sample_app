@@ -49,9 +49,10 @@ class UsersEditTest < ActionDispatch::IntegrationTest
     assert_equal email, @user.email
   end
 =end
-
+#リスト 10.29: フレンドリーフォワーディングのテスト
  # ログインしていないユーザーが編集ページにアクセスしようとしていたなら、
  # ユーザーがログインした後にはその編集ページにリダイレクトされるようにする
+ # なお、リダイレクトによってeditが描画されなくなったので、該当テストを削除
   test "successful edit with friendly forwarding" do
     get edit_user_path(@user)
     log_in_as(@user)
@@ -69,6 +70,12 @@ class UsersEditTest < ActionDispatch::IntegrationTest
     @user.reload
     assert_equal name,  @user.name
     assert_equal email, @user.email
+
+  #演習 フレンドリーフォワーディングで渡されたURLに初回のみ転送されていること
+    delete logout_path
+    log_in_as(@user)
+    assert_redirected_to @user
+
   end
 
 end
