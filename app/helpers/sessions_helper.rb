@@ -36,7 +36,9 @@ module SessionsHelper
       user = User.find_by(id: user_id)
 
       # user が存在し、認証できた場合。
-      if user && user.authenticated?(cookies[:remember_token])
+      # if user && user.authenticated?(cookies[:remember_token]) #抽象化未対応
+      # SessionHelper authenticated? を抽象化
+      if user && user.authenticated?(:remember, cookies[:remember_token])
         log_in user
         @current_user = user
       end

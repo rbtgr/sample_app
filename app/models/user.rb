@@ -76,6 +76,7 @@ class User < ApplicationRecord
     )
   end
 
+=begin
   # 渡されたトークンがダイジェストと一致したらtrueを返す
   # 注：このローカル変数 remember_token は、アクセサで定義した同名変数とは別。
   def authenticated?(remember_token)
@@ -84,13 +85,22 @@ class User < ApplicationRecord
     BCrypt::Password.new(remember_digest).is_password?(remember_token)
     #                    ^- self.remember_digest :DBの登録データ
   end
+=end
+
+ # リスト 11.26: 抽象化された authenticated?メソッド
+  # トークンがダイジェストと一致したらtrueを返す
+  def authenticated?(attribute, token)
+    digest = send("#{attribute}_digest")
+    return false if digest.nil?
+    BCrypt::Password.new(digest).is_password?(token)
+  end
 
   # ユーザーのログイン情報を破棄する
   def forget
     update_attribute(:remember_digest, nil)
   end
 
-private
+private #-------------------------------------------------------------
     # メールアドレスをすべて小文字にする
     def downcase_email
       self.email = email.downcase

@@ -100,7 +100,7 @@ class UserTest < ActiveSupport::TestCase
   # 記憶ダイジェストを持たないユーザーを用意し、
   # 記憶トークンを空のまま authenticated?  メソッドを呼ぶ
   test "authenticated? should return false for a user with nil digest" do
-    assert_not @user.authenticated?('')
-  end
+    assert_not @user.authenticated?(:remember, '')
+  end #                               ^- 抽象化対応
 
 end
