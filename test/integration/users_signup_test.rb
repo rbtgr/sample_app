@@ -64,6 +64,8 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     end
   #POSTリクエストを送信した結果を見て、指定されたリダイレクト先に移動する
     follow_redirect!
+
+=begin メールでのアクティベーションへ変更するため一時無効化
     assert_template 'users/show'
 
   # flash のテスト
@@ -72,6 +74,8 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
 
    # サインアップ後に自動的にログインしていること
     assert is_logged_in?,  "ログインできてないぞ"
+=end
   end
+
 
 end

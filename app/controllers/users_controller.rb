@@ -30,12 +30,17 @@ class UsersController < ApplicationController
    #@user = User.new(params[:user]) ではパーミッションがないためエラー
 
     if @user.save  #保存処理の成否
-      #正常系
-      log_in (@user) #ヘルパーでログイン
-      flash[:success] = "Welcome to the Sample App!"
-      redirect_to @user
-        # redirect_to user_url(@user) と同等
-    else #失敗時の処理
+    #正常系
+     # メーラーアクティベーションを使わない場合
+      # log_in (@user) #ヘルパーでログイン
+      # flash[:success] = "Welcome to the Sample App!"
+      # redirect_to @user # redirect_to user_url(@user) と同等
+
+      UserMailer.account_activation(@user).deliver_now
+      flash[:info] = "Please check your email to activate your account."
+      redirect_to root_url
+
+      else #失敗時の処理
       render 'new'
     end
   end
