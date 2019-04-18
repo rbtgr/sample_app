@@ -7,6 +7,8 @@ class SessionsController < ApplicationController
     # user -> @user
     @user = User.find_by(email: params[:session][:email].downcase)
     if @user && @user.authenticate(params[:session][:password])
+
+=begin
       # user  : find_byの該当があればモデルオブジェクト、なければnil
       # user.authenticate(xxx) :
       #             パスワード一致ならモデルオブジェクト、なければnil
@@ -26,6 +28,18 @@ class SessionsController < ApplicationController
         # リスト 10.32 では user
     #  redirect_to @user
     #  redirect_to user_url(user) と同じ
+=end
+   #  リスト 11.32: 有効でないユーザーがログインすることのないようにする
+    if user.activated?
+      log_in user
+      params[:session][:remember_me] == '1' ? remember(user) : forget(user)
+      redirect_back_or user
+    else
+      message  = "Account not activated. "
+      message += "Check your email for the activation link."
+      flash[:warning] = message
+      redirect_to root_url
+    end
 
   else
     # エラーメッセージ
