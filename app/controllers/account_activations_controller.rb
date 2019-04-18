@@ -9,8 +9,9 @@ class AccountActivationsController < ApplicationController
         # 本当のユーザーとしてログインできてしまう。
       user.authenticated?(:activation, params[:id])
 
-      user.update_attribute(:activated,    true)
-      user.update_attribute(:activated_at, Time.zone.now)
+      user.activate # アクティベートをUsersオブジェクトのメソッドに変更
+       # user.update_attribute(:activated,    true)
+       # user.update_attribute(:activated_at, Time.zone.now)
       log_in user
       flash[:success] = "Account activated!"
       redirect_to user

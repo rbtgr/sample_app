@@ -2,6 +2,14 @@ require 'test_helper'
 
 class UsersSignupTest < ActionDispatch::IntegrationTest
 
+  def setup
+    ActionMailer::Base.deliveries.clear
+     # 配列deliveries はメールの数を調べる際に利用。
+     # setupメソッドでこれを初期化しておかないと、
+     # 並行して行われる他のテストでメールが配信されたときに
+     # エラーが発生してしまいます
+  end
+
   test "invalid signup information" do
     get signup_path
   # 引数がブロック実行後も変わらないこと
@@ -47,7 +55,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     assert_select 'div.alert'
   end
 
-  test "valid signup information" do
+  test "valid signup information with account activation" do
     get signup_path
     assert_difference 'User.count', 1 do
       post(
@@ -62,10 +70,35 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
         }
       )
     end
+
+  # リスト 11.33: ユーザー登録のテストにアカウント有効化を追加する
+    # メールが配信されているか確認する。
+    assert_equal 1, ActionMailer::Base.deliveries.size
+
+    # assignsメソッドを使い、Usersコントローラーで作成された
+    # インスタンス変数 @userを 変数 userに保存
+    user = assigns(:user)
+    assert_not user.activated?
+
+    # 有効化していない状態でログインしてみる
+    log_in_as(user)
+    assert_not is_logged_in?
+
+    # 有効化トークンが不正な場合
+    get edit_account_activation_path("invalid token", email: user.email)
+    assert_not is_logged_in?
+
+    # トークンは正しいがメールアドレスが無効な場合
+    get edit_account_activation_path(user.activation_token, email: 'wrong')
+    assert_not is_logged_in?
+
+    # 有効化トークンが正しい場合
+    get edit_account_activation_path(user.activation_token, email: user.email)
+    assert user.reload.activated?
+
   #POSTリクエストを送信した結果を見て、指定されたリダイレクト先に移動する
     follow_redirect!
 
-=begin メールでのアクティベーションへ変更するため一時無効化
     assert_template 'users/show'
 
   # flash のテスト
@@ -74,7 +107,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
 
    # サインアップ後に自動的にログインしていること
     assert is_logged_in?,  "ログインできてないぞ"
-=end
+
   end
 
 end

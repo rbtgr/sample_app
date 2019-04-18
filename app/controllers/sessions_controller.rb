@@ -3,6 +3,7 @@ class SessionsController < ApplicationController
     # debugger # デバッガを起動するメソッド
   end
 
+# 演習9.3.1.1  assign メッソドを使うため user -> @user
   def create
     # user -> @user
     @user = User.find_by(email: params[:session][:email].downcase)
@@ -29,11 +30,13 @@ class SessionsController < ApplicationController
     #  redirect_to @user
     #  redirect_to user_url(user) と同じ
 =end
+
    #  リスト 11.32: 有効でないユーザーがログインすることのないようにする
-    if user.activated?
-      log_in user
-      params[:session][:remember_me] == '1' ? remember(user) : forget(user)
-      redirect_back_or user
+   #  注 userを @userにする必要あり
+    if @user.activated?
+      log_in @user
+      params[:session][:remember_me] == '1' ? remember(@user) : forget(@user)
+      redirect_back_or @user
     else
       message  = "Account not activated. "
       message += "Check your email for the activation link."

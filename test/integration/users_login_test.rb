@@ -65,7 +65,7 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
       assigns(:user).remember_token)
 
     #assert_not_empty cookies['remember_token']
-    # 要注意 ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
+    # 要注意 -----------------------------------------
     # テスト内ではcookiesメソッドにシンボルを使えない
   end
 

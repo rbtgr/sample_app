@@ -12,6 +12,9 @@ class UsersController < ApplicationController
     @users = User.paginate(page: params[:page])
     # ページネーション :params[:page] は will_paginateによって自動生成される。
 
+    # 演習 リスト 11.40: 有効なユーザーだけを表示するコードのテンプレート
+    # @users = User.where(activated: true).paginate(page: params[:page])
+
   end
 
   def show
@@ -19,6 +22,13 @@ class UsersController < ApplicationController
     #params[:id]は文字列型の "1" ですが、
     #findメソッドでは自動的に整数型に変換されます)。
     #debugger #byebug gemによるデバッガー起動
+
+    # 演習 リスト 11.40: 有効なユーザーだけを表示するコードのテンプレート
+    redirect_to root_url and return unless @user.activated?
+    # &&演算子の方がandよりも優先順位が高い
+    # redirect_to (root_url && return unless @user )
+    # (redirect_to root_url)  &&  return unless @user
+
   end
 
   def new
@@ -36,7 +46,10 @@ class UsersController < ApplicationController
       # flash[:success] = "Welcome to the Sample App!"
       # redirect_to @user # redirect_to user_url(@user) と同等
 
-      UserMailer.account_activation(@user).deliver_now
+      @user.send_activation_email # メール送信
+       # UserMailer.account_activation(@user).deliver_now
+       # メール送信はUsersモデルのメソッドに移管した
+
       flash[:info] = "Please check your email to activate your account."
       redirect_to root_url
 
