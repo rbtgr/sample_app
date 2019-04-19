@@ -133,17 +133,22 @@ class User < ApplicationRecord
     UserMailer.password_reset(self).deliver_now
   end
 
-private #-------------------------------------------------------------
-    # メールアドレスをすべて小文字にする
-    def downcase_email
-      self.email = email.downcase
-      # self.email.downcase! #演習 こうもかける
-    end
+  # パスワード再設定の期限が切れている場合はtrueを返す
+  def password_reset_expired?
+    reset_sent_at < 2.hours.ago
+  end
 
-    # 有効化トークンとダイジェストを作成および代入する
-    def create_activation_digest
-      self.activation_token  = User.new_token
-      self.activation_digest = User.digest(activation_token)
-    end
+private #-------------------------------------------------------------
+  # メールアドレスをすべて小文字にする
+  def downcase_email
+    self.email = email.downcase
+    # self.email.downcase! #演習 こうもかける
+  end
+
+  # 有効化トークンとダイジェストを作成および代入する
+  def create_activation_digest
+    self.activation_token  = User.new_token
+    self.activation_digest = User.digest(activation_token)
+  end
 
 end
