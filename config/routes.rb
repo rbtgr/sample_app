@@ -25,6 +25,10 @@ Rails.application.routes.draw do
    # URL           /account_activation/<token>/edit
    # 名前付きルート  edit_account_activation_url(token)
 
+  # リスト 12.1: パスワード再設定用リソースを追加する
+  resources :password_resets, only: [:new, :create, :edit, :update]
+
+
 =begin
 HTTP  Request|
 Verb  | URL          |Action | 名前付きroot     | 用途 |
