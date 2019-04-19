@@ -66,6 +66,7 @@ Rails.application.configure do
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
 
   # リスト 11.41: Railsのproduction環境でSendGridを使う設定
+
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.delivery_method = :smtp
   host = 'https://gentle-bastion-36812.herokuapp.com/'
