@@ -24,6 +24,11 @@ class PasswordResetsController < ApplicationController
   end
 
   def update
+    # (1)パスワード再設定の有効期限が切れていないか
+    # (2)無効なパスワードであれば失敗させる (失敗した理由も表示する)
+    # (3)新しいパスワードが空文字列になっていないか (ユーザー情報の編集ではOKだった)
+    # (4)新しいパスワードが正しければ、更新する
+
     if params[:user][:password].empty?                  # (3) への対応
 
       # リスト 10.13で User の validates について、
@@ -31,8 +36,10 @@ class PasswordResetsController < ApplicationController
       @user.errors.add(:password, :blank)
         # パスワードが空だった時に空の文字列に対するデフォルトのメッセージを表示
       render 'edit'
+    # (4)新しいパスワードが正しければ、更新する
     elsif @user.update_attributes(user_params)          # (4) への対応
       log_in @user
+      @user.update_attribute(:reset_digest, nil)
       flash[:success] = "Password has been reset."
       redirect_to @user
     else
