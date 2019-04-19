@@ -89,6 +89,10 @@ class User < ApplicationRecord
 
  # リスト 11.26: 抽象化された authenticated?メソッド
   # トークンがダイジェストと一致したらtrueを返す
+  # remember_digest
+  # activate_digest
+  # reset_digest の３種全てに対応する
+
   def authenticated?(attribute, token)
     digest = send("#{attribute}_digest")
     return false if digest.nil?
