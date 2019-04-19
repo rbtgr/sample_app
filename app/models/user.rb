@@ -1,7 +1,7 @@
 class User < ApplicationRecord
 
  # アクセスメソッドを使い、仮装的な属性remember_token を作る。
-  attr_accessor :remember_token, :activation_token
+  attr_accessor :remember_token, :activation_token, :reset_token
    # 読み込みメソッド user.remember_token と
    # 書き込みメソッド user.remember_token = xxx   が設定される。
 
@@ -115,6 +115,18 @@ class User < ApplicationRecord
   # 有効化用のメールを送信する
   def send_activation_email
     UserMailer.account_activation(self).deliver_now
+  end
+
+  # パスワード再設定の属性を設定する
+  def create_reset_digest
+    self.reset_token = User.new_token
+    update_attribute(:reset_digest,  User.digest(reset_token))
+    update_attribute(:reset_sent_at, Time.zone.now)
+  end
+
+  # パスワード再設定のメールを送信する
+  def send_password_reset_email
+    UserMailer.password_reset(self).deliver_now
   end
 
 private #-------------------------------------------------------------
